@@ -1,0 +1,8 @@
+namespace TestSwagLabs;
+
+internal static class SiteUrls
+{
+    public const string SiteUrl = "https://www.saucedemo.com/";
+    public const string InventoryUrl = "https://www.saucedemo.com/inventory.html";
+    public const string ItemUrl = "https://www.saucedemo.com/inventory-item.html?id=";
+}
