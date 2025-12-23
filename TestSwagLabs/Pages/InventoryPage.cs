@@ -36,7 +36,7 @@ public class InventoryPage
         }
         catch (NoSuchElementException)
         {
-            throw new Exception($"Add to Cart button for item ID {itemId} not found.");
+            throw new ItemNotFoundException(itemId);
         }
 
         addToCartButton.Click();
@@ -51,7 +51,7 @@ public class InventoryPage
         }
         catch (NoSuchElementException)
         {
-            throw new NoItemsAddedBeforeToCartException();
+            throw new ItemNotAddedBeforeToCartException();
         }
 
         removeFromCartButton.Click();
@@ -66,7 +66,7 @@ public class InventoryPage
         }
         catch (NoSuchElementException)
         {
-            throw new Exception($"Item with ID {itemId} not found on the page.");
+            throw new ItemNotFoundException(itemId);
         }
     }
 }

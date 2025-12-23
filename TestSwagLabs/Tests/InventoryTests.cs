@@ -38,7 +38,6 @@ internal class InventoryTests
         LoginPage loginPage = new LoginPage(driver);
         loginPage.Login(userName, password);
 
-
         InventoryPage inventoryPage = new InventoryPage(driver);
         int itemsInCartBeforeAdding = inventoryPage.GetNumberOfItemsInCart();
 
@@ -46,6 +45,19 @@ internal class InventoryTests
         int itemsInCartAfterAdding = inventoryPage.GetNumberOfItemsInCart();
 
         Assert.That(itemsInCartAfterAdding, Is.EqualTo(itemsInCartBeforeAdding + 1));
+    }
+
+    [Test]
+    [TestCase("standard_user", "secret_sauce", "some-id-not-in-the-items-list-12345")]
+    public void AddToCart_ThrowsItemNotFoundException(string userName, string password, string itemId)
+    {
+        driver.Navigate().GoToUrl(SiteUrls.SiteUrl);
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.Login(userName, password);
+
+        InventoryPage inventoryPage = new InventoryPage(driver);
+
+        Assert.Throws<ItemNotFoundException>(() => inventoryPage.AddToCartByItemId(itemId));
     }
 
     [Test]
@@ -64,7 +76,6 @@ internal class InventoryTests
         inventoryPage.RemoveItemFromCartByItemId(itemId);
 
         int itemsInCartAfterRemoving = inventoryPage.GetNumberOfItemsInCart();
-        
 
         Assert.That(itemsInCartAfterRemoving, Is.EqualTo(itemsInCartBeforeRemoving - 1));
     }
@@ -79,7 +90,7 @@ internal class InventoryTests
 
         InventoryPage inventoryPage = new InventoryPage(driver);
 
-        Assert.Throws<NoItemsAddedBeforeToCartException>(() => inventoryPage.RemoveItemFromCartByItemId(itemId));
+        Assert.Throws<ItemNotAddedBeforeToCartException>(() => inventoryPage.RemoveItemFromCartByItemId(itemId));
     }
 
     [Test]
@@ -94,5 +105,17 @@ internal class InventoryTests
         homePage.NavigateToItemPageBasedOnItemId(itemId);
 
         Assert.IsTrue(driver.Url.Contains(SiteUrls.ItemUrl + itemId));
+    }
+
+    [Test]
+    [TestCase("standard_user", "secret_sauce", "some-id-not-in-the-items-list-12345")]
+    public void GoToItemPage_ThrowsItemNotFoundException(string userName, string password, string itemId)
+    {
+        driver.Navigate().GoToUrl(SiteUrls.SiteUrl);
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.Login(userName, password);
+
+        InventoryPage inventoryPage = new InventoryPage(driver);
+        Assert.Throws<ItemNotFoundException>(() => inventoryPage.NavigateToItemPageBasedOnItemId(itemId));
     }
 }
