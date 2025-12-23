@@ -1,8 +1,10 @@
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using TestSwagLabs.Exceptions;
 using TestSwagLabs.Pages;
+using TestSwagLabs.SiteConfigurations;
 
 namespace TestSwagLabs;
 
@@ -117,5 +119,85 @@ internal class InventoryTests
 
         InventoryPage inventoryPage = new InventoryPage(driver);
         Assert.Throws<ItemNotFoundException>(() => inventoryPage.NavigateToItemPageBasedOnItemId(itemId));
+    }
+
+    [Test]
+    [TestCase("standard_user", "secret_sauce")]
+    public void FilterItems_ShouldOrderItemsInAccendingOrderByTheirNames(string userName, string password)
+    {
+        driver.Navigate().GoToUrl(SiteUrls.SiteUrl);
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.Login(userName, password);
+
+        InventoryPage inventoryPage = new InventoryPage(driver);
+
+        inventoryPage.SetFilteringType(SortingType.NameAsc);
+
+        List<string> itemsInInventory = inventoryPage.GetAllItemNamesInInventory();
+
+        for (int i = 0; i < itemsInInventory.Count - 1; i++)
+        {
+            Assert.LessOrEqual(itemsInInventory[i], itemsInInventory[i + 1]);
+        }
+    }
+
+    [Test]
+    [TestCase("standard_user", "secret_sauce")]
+    public void FilterItems_ShouldOrderItemsInDescendingOrderByTheirNames(string userName, string password)
+    {
+        driver.Navigate().GoToUrl(SiteUrls.SiteUrl);
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.Login(userName, password);
+
+        InventoryPage inventoryPage = new InventoryPage(driver);
+
+        inventoryPage.SetFilteringType(SortingType.NameDesc);
+
+        List<string> itemsInInventory = inventoryPage.GetAllItemNamesInInventory();
+
+        for (int i = 0; i < itemsInInventory.Count - 1; i++)
+        {
+            Assert.GreaterOrEqual(itemsInInventory[i], itemsInInventory[i + 1]);
+        }
+    }
+
+    [Test]
+    [TestCase("standard_user", "secret_sauce")]
+    public void FilterItems_ShouldOrderItemsInAccendingOrderByTheirPrices(string userName, string password)
+    {
+        driver.Navigate().GoToUrl(SiteUrls.SiteUrl);
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.Login(userName, password);
+
+        InventoryPage inventoryPage = new InventoryPage(driver);
+
+        inventoryPage.SetFilteringType(SortingType.PriceAsc);
+
+        List<double> itemsInInventory = inventoryPage.GetAllItemPricesInInventory();
+
+        for (int i = 0; i < itemsInInventory.Count - 1; i++)
+        {
+            Assert.LessOrEqual(itemsInInventory[i], itemsInInventory[i + 1]);
+        }
+    }
+
+    [Test]
+    [TestCase("standard_user", "secret_sauce")]
+    public void FilterItems_ShouldOrderItemsInDescendingOrderByTheirPrices(string userName, string password)
+    {
+        driver.Navigate().GoToUrl(SiteUrls.SiteUrl);
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.Login(userName, password);
+
+        InventoryPage inventoryPage = new InventoryPage(driver);
+
+        inventoryPage.SetFilteringType(SortingType.PriceDesc);
+
+        List<double> itemsInInventory = inventoryPage.GetAllItemPricesInInventory();
+
+        for (int i = 0; i < itemsInInventory.Count - 1; i++)
+        {
+            Assert.GreaterOrEqual(itemsInInventory[i], itemsInInventory[i + 1]);
+        }
     }
 }
