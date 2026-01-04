@@ -86,7 +86,7 @@ public class InventoryPage
         return inventoryContainer.Select(item => item.Text).ToList();
     }
 
-    public string GetFilteringType()
+    public string? GetFilteringType()
     {
         IWebElement? filterDropdown = null;
 
