@@ -210,7 +210,7 @@ internal class InventoryTests
         loginPage.Login(userName, password);
 
         InventoryPage inventoryPage = new InventoryPage(driver);
-        inventoryPage.ViewCartItems();
+        inventoryPage.NavigateToCartItemsPage();
 
         Assert.That(driver.Url, Is.EqualTo(SiteUrls.CartUrl));
     }

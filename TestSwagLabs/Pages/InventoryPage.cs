@@ -142,7 +142,7 @@ public class InventoryPage
         return inventoryContainer.Select(item => double.Parse(item.Text.Substring(1))).ToList();
     }
 
-    public void ViewCartItems()
+    public void NavigateToCartItemsPage()
     {
         IWebElement? cartIcon = null;
 
@@ -156,5 +156,42 @@ public class InventoryPage
         }
 
         cartIcon.Click();
+    }
+
+    public void AddNItemsToCart(int numberOfItems)
+    {
+        var items = _driver.FindElements(By.ClassName("inventory_item"));
+
+        if (numberOfItems < 0 || numberOfItems > items.Count)
+        {
+            throw new ArgumentOutOfRangeException(nameof(numberOfItems), "Number of items to add must be between 0 and the total number of items in inventory.");
+        }
+
+        for (int i = 0; i < numberOfItems && i < items.Count; i++)
+        {
+            var item = items[i];
+            var addToCartButton = item.FindElement(By.ClassName("btn_primary"));
+            addToCartButton.Click();
+        }
+    }
+
+    public string AddRandomItemToCart()
+    {
+        var items = _driver.FindElements(By.ClassName("inventory_item"));
+
+        var random = new Random();
+        int randomIndex = random.Next(items.Count);
+
+        var selectedItem = items[randomIndex];
+
+        var inventoryItemImageiv = selectedItem.FindElement(By.ClassName("inventory_item_img"));
+        var linkElement = inventoryItemImageiv.FindElement(By.TagName("a"));
+        string fullId = linkElement.GetAttribute("id");
+        string idNumber = fullId.Split('_')[1];
+
+        var addToCartButton = selectedItem.FindElement(By.ClassName("btn_primary"));
+        addToCartButton.Click();
+
+        return idNumber;
     }
 }
