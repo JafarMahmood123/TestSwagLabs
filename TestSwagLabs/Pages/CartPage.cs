@@ -11,7 +11,7 @@ public class CartPage
     {
         _driver = driver;
     }
-    
+
     public int GetNumberOfItemsInCart()
     {
         IWebElement? element = null;
@@ -44,5 +44,66 @@ public class CartPage
         {
             throw new ItemNotFoundException(itemId);
         }
+    }
+
+    public List<string> GetAllItemsIdsInCart()
+    {
+        var itemElements = _driver.FindElements(By.ClassName("cart_item"));
+        var itemsIds = new List<string>();
+
+        foreach (var itemElement in itemElements)
+        {
+            var itemId = itemElement.FindElement(By.ClassName("item_pricebar"))
+            .FindElement(By.ClassName("btn_secondary"))
+            .GetAttribute("id").Replace("remove-", "");
+            itemsIds.Add(itemId);
+        }
+
+        return itemsIds;
+    }
+
+    public void RemoveItemFromCartByItemId(string itemId)
+    {
+        IWebElement? removeFromCartButton = null;
+        try
+        {
+            removeFromCartButton = _driver.FindElement(By.Id("remove-" + itemId));
+        }
+        catch (NoSuchElementException)
+        {
+            throw new ItemNotAddedBeforeToCartException();
+        }
+
+        removeFromCartButton.Click();
+    }
+
+    public void NavigateBackToInventoryPage()
+    {
+        IWebElement? continueShoppingButton = null;
+        try
+        {
+            continueShoppingButton = _driver.FindElement(By.Id("continue-shopping"));
+        }
+        catch (NoSuchElementException)
+        {
+            throw new Exception("Continue Shopping button not found on the Cart Page.");
+        }
+
+        continueShoppingButton.Click();
+    }
+
+    public void NavigateToCheckOutPage()
+    {
+        IWebElement? checkoutButton = null;
+        try
+        {
+            checkoutButton = _driver.FindElement(By.Id("checkout"));
+        }
+        catch (NoSuchElementException)
+        {
+            throw new Exception("Checkout button not found on the Cart Page.");
+        }
+
+        checkoutButton.Click();
     }
 }

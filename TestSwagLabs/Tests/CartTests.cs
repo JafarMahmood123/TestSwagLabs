@@ -69,4 +69,67 @@ public class CartTests
 
         Assert.IsTrue(driver.Url.Contains(SiteUrls.ItemUrl + itemId));
     }
+
+    [Test]
+    [TestCase("standard_user", "secret_sauce")]
+    public void RemoveItemFromCartByItemId_ShouldRemoveItemFromCart(string userName, string password)
+    {
+        driver.Navigate().GoToUrl(SiteUrls.SiteUrl);
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.Login(userName, password);
+
+        InventoryPage inventoryPage = new InventoryPage(driver);
+        inventoryPage.AddRandomItemToCart();
+        inventoryPage.NavigateToCartItemsPage();
+
+        CartPage cartPage = new CartPage(driver);
+        var itemsIds = cartPage.GetAllItemsIdsInCart();
+
+        Random random = new Random();
+        string itemId = itemsIds[random.Next(itemsIds.Count)];
+
+        cartPage.RemoveItemFromCartByItemId(itemId);
+
+        var itemsIdsInCart = cartPage.GetAllItemsIdsInCart();
+        
+        Assert.IsFalse(itemsIdsInCart.Contains(itemId));
+    }
+
+    [Test]
+    [TestCase("standard_user", "secret_sauce")]
+    public void NavigateBackToInventoryPage_ShouldNavigateBackToInventoryPage(string userName, string password)
+    {
+        driver.Navigate().GoToUrl(SiteUrls.SiteUrl);
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.Login(userName, password);
+
+        InventoryPage inventoryPage = new InventoryPage(driver);
+        inventoryPage.NavigateToCartItemsPage();
+
+        CartPage cartPage = new CartPage(driver);
+        cartPage.NavigateBackToInventoryPage();
+
+        Assert.IsTrue(driver.Url.Contains(SiteUrls.InventoryUrl));
+    }
+
+    [Test]
+    [TestCase("standard_user", "secret_sauce")]
+    public void NavigateToCheckOutPage_ShouldNavigateToCheckOutPage(string userName, string password)
+    {
+        driver.Navigate().GoToUrl(SiteUrls.SiteUrl);
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.Login(userName, password);
+
+        InventoryPage inventoryPage = new InventoryPage(driver);
+        inventoryPage.NavigateToCartItemsPage();
+
+        CartPage cartPage = new CartPage(driver);
+        cartPage.NavigateToCheckOutPage();
+
+        Assert.IsTrue(driver.Url.Contains(SiteUrls.CheckOutUrl));
+    }
+
+    // Error navigating to the checkout page without having items in the cart.
+
+    
 }
