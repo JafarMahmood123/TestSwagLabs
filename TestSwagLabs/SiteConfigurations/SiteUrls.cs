@@ -7,4 +7,5 @@ internal static class SiteUrls
     public const string ItemUrl = "https://www.saucedemo.com/inventory-item.html?id=";
     public const string CartUrl = "https://www.saucedemo.com/cart.html";
     public const string CheckOutUrl = "https://www.saucedemo.com/checkout-step-one.html";
+    public const string OverViewUrl = "https://www.saucedemo.com/checkout-step-two.html";
 }
