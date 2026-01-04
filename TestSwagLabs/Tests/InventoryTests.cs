@@ -200,4 +200,18 @@ internal class InventoryTests
             Assert.GreaterOrEqual(itemsInInventory[i], itemsInInventory[i + 1]);
         }
     }
+
+    [Test]
+    [TestCase("standard_user", "secret_sauce")]
+    public void ViewCartItems_ShouldNavigateToCartPage(string userName, string password)
+    {
+        driver.Navigate().GoToUrl(SiteUrls.SiteUrl);
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.Login(userName, password);
+
+        InventoryPage inventoryPage = new InventoryPage(driver);
+        inventoryPage.ViewCartItems();
+
+        Assert.That(driver.Url, Is.EqualTo(SiteUrls.CartUrl));
+    }
 }

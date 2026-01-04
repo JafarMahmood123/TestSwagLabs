@@ -141,4 +141,20 @@ public class InventoryPage
 
         return inventoryContainer.Select(item => double.Parse(item.Text.Substring(1))).ToList();
     }
+
+    public void ViewCartItems()
+    {
+        IWebElement? cartIcon = null;
+
+        try
+        {
+            cartIcon = _driver.FindElement(By.ClassName("shopping_cart_link"));
+        }
+        catch (NoSuchElementException)
+        {
+            throw new Exception("Cart icon not found.");
+        }
+
+        cartIcon.Click();
+    }
 }
