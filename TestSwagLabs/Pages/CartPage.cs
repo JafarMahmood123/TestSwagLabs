@@ -106,4 +106,20 @@ public class CartPage
 
         checkoutButton.Click();
     }
+
+    public void OpenDrawer()
+    {
+        IWebElement? drawerButton = null;
+
+        try
+        {
+            drawerButton = _driver.FindElement(By.Id("react-burger-menu-btn"));
+        }
+        catch (NoSuchElementException)
+        {
+            throw new Exception("Drawer button not found.");
+        }
+
+        drawerButton.Click();
+    }
 }

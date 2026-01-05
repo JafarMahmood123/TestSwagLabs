@@ -211,4 +211,46 @@ public class InventoryPage
 
         return idNumber;
     }
+
+    public void OpenDrawer()
+    {
+        IWebElement? drawerButton = null;
+
+        try
+        {
+            drawerButton = _driver.FindElement(By.Id("react-burger-menu-btn"));
+        }
+        catch (NoSuchElementException)
+        {
+            throw new Exception("Drawer button not found.");
+        }
+
+        drawerButton.Click();
+    }
+
+    public bool IsDrawerOpen()
+    {
+        try
+        {
+            var drawerElement = _driver.FindElement(By.ClassName("bm-menu-wrap"));
+            return drawerElement.Displayed;
+        }
+        catch (NoSuchElementException)
+        {
+            return false;
+        }
+    }
+
+    internal bool IsDrawerClosed()
+    {
+        try
+        {
+            var drawerElement = _driver.FindElement(By.ClassName("bm-menu-wrap"));
+            return drawerElement.Displayed;
+        }
+        catch (NoSuchElementException)
+        {
+            return false;
+        }
+    }
 }

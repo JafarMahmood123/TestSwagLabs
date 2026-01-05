@@ -214,4 +214,18 @@ internal class InventoryTests
 
         Assert.That(driver.Url, Is.EqualTo(SiteUrls.CartUrl));
     }
+
+    [Test]
+    [TestCase("standard_user", "secret_sauce")]
+    public void OpenDrawer_ShouldOpenTheSideBarDrawer(string username, string password)
+    {
+        driver.Navigate().GoToUrl(SiteUrls.SiteUrl);
+        var loginPage = new LoginPage(driver);
+        loginPage.Login(username, password);
+
+        var inventoryPage = new InventoryPage(driver);
+        inventoryPage.OpenDrawer();
+
+        Assert.That(inventoryPage.IsDrawerOpen(), Is.True);
+    }
 }

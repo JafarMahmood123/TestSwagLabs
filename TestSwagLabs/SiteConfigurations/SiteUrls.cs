@@ -9,4 +9,5 @@ internal static class SiteUrls
     public const string CheckOutUrl = "https://www.saucedemo.com/checkout-step-one.html";
     public const string OverViewUrl = "https://www.saucedemo.com/checkout-step-two.html";
     public const string OrderCompleteUrl = "https://www.saucedemo.com/checkout-complete.html";
+    public const string AboutUrl = "https://saucelabs.com/";
 }
