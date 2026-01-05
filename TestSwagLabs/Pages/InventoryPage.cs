@@ -194,4 +194,21 @@ public class InventoryPage
 
         return idNumber;
     }
+
+    public string GetRandomItemIdFromInventroyItems()
+    {
+        var items = _driver.FindElements(By.ClassName("inventory_item"));
+
+        var random = new Random();
+        int randomIndex = random.Next(items.Count);
+
+        var selectedItem = items[randomIndex];
+
+        var inventoryItemImageiv = selectedItem.FindElement(By.ClassName("inventory_item_img"));
+        var linkElement = inventoryItemImageiv.FindElement(By.TagName("a"));
+        string fullId = linkElement.GetAttribute("id");
+        string idNumber = fullId.Split('_')[1];
+
+        return idNumber;
+    }
 }
